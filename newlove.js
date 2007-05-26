@@ -101,18 +101,9 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	content = foo.innerHTML;
 
 	// Check each lovin' against list of author's previous lovin'
-	if (!arrayContains(oldlove[author], content)) {
-		// It's new, highlight it
-		//foo.style.backgroundColor = "blue";
-		// Also add "newlove" class to it
-		var cName = foo.className;
-		if (cName) {
-			cName = cName + " newlove";
-			GM_log("New class = " + cName);
-		} else {
-			cName = "newlove";
-		}
-		foo.className = cName;
+	if (arrayContains(oldlove[author], content)) {
+		// It's old, remove it
+		foo.parentNode.removeChild(foo);
 	}
 
 	// Fetch the array of planlove for the current author
