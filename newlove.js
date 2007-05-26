@@ -111,7 +111,7 @@ startTime = new Date();
 //alert(newlove.toSource());
 	// Store the new list value as a string (hacked this way because
 	// we can only store strings, ints, and booleans
-	//GM_setValue("planlove_hash", newlove.toSource());
+	GM_setValue("planlove_hash", newlove.toSource());
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
 
