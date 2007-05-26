@@ -24,6 +24,29 @@ function array_contains(arr, obj) {
 	return false;
 }
 
+// Figure out if this is actually the quicklove page, as opposed to 
+// a regular search. Hackity hack!
+	// First we snatch one of the autoread links from the page
+	var autoreadLink = document.evaluate(
+		"//a[@class='lev2']",
+		document,
+		null,
+		XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+		null);
+	var linky = autoreadLink.snapshotItem(0);
+	// Then we grab the url from the link and parse it for a username
+	var urly = linky.getAttribute("href");
+	var startIndex = urly.indexOf("mysearch=") + 9;
+	var endIndex = urly.indexOf("&", startIndex);
+	var username = urly.substring(startIndex, endIndex);
+	// Now, if the page we're currently on isn't searching for that
+	// username, fuggedaboudit.
+	if (window.location.href.indexOf(username) == -1) {
+		GM_log("False alarm, this isn't a quicklove page. Exiting.");
+		return false;
+	}
+alert(window.location.href.indexOf(username));
+
 var startTime = new Date();
 var origTime = new Date();
 
@@ -56,10 +79,10 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	foo = loves.snapshotItem(i);
 	var author = getAuthor(foo.parentNode.parentNode);
 
-//var newBar = document.createElement('br');
-//	foo.parentNode.insertBefore(newBar, foo.nextSibling);
-//	foo.parentNode.insertBefore(newBar, foo);
-	if (!array_contains(oldlove[author], foo.innerHTML)) {
+	content = foo.innerHTML;
+
+	// Check each lovin' against list of author's previous lovin'
+	if (!array_contains(oldlove[author], content)) {
 		// It's new, highlight it
 		//foo.style.backgroundColor = "blue";
 		// Also add "newlove" class to it
@@ -78,7 +101,7 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	// Create it if it doesn't exist
 	if (!temp_arr) { temp_arr = []; }
 	// Add it to the new list of planlove
-	temp_arr[temp_arr.length] = foo.innerHTML;
+	temp_arr[temp_arr.length] = content;
 	newlove[author] = temp_arr;
 
 }
@@ -91,8 +114,5 @@ startTime = new Date();
 	//GM_setValue("planlove_hash", newlove.toSource());
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
-
-//	foo.style.borderWidth = "1px";
-//	foo.style.borderStyle = "dashed";
 
 GM_log("Time spent: (1) " + timeDiff1 + " (2) " + timeDiff2 + " (3) " + timeDiff3 + " (4) " + timeDiff4 + " (total) " +  timeDiffTot);
