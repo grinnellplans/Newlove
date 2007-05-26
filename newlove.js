@@ -26,19 +26,13 @@ function array_contains(arr, obj) {
 
 // Figure out if this is actually the quicklove page, as opposed to 
 // a regular search. Hackity hack!
-	// First we snatch one of the autoread links from the page
-	var autoreadLink = document.evaluate(
-		"//a[@class='lev2']",
-		document,
-		null,
-		XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
-		null);
-	var linky = autoreadLink.snapshotItem(0);
-	// Then we grab the url from the link and parse it for a username
-	var urly = linky.getAttribute("href");
-	var startIndex = urly.indexOf("mysearch=") + 9;
-	var endIndex = urly.indexOf("&", startIndex);
-	var username = urly.substring(startIndex, endIndex);
+	username = GM_getValue("username");
+	if (!username) {
+		// We need to determine the username
+		username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.").toLowerCase();
+		if (!username) return false;
+		GM_setValue("username", username);
+	}
 	// Now, if the page we're currently on isn't searching for that
 	// username, fuggedaboudit.
 	if (window.location.href.indexOf(username) == -1) {
