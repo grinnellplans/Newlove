@@ -70,13 +70,13 @@ function saveOldlove() {
 		var guessUsername = urly.substring(startIndex, endIndex);
 
 		// Now ask for confirmation
-		username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
+		username = window.prompt("What's your username?", guessUsername).toLowerCase();
 		if (!username) return false;
 		GM_setValue("username", username);
 	}
 	// Now, if the page we're currently on isn't searching for that
 	// username, fuggedaboudit.
-	if (window.location.href.indexOf(username) == -1 && username != "everyone") {
+	if (window.location.href.indexOf(username) == -1) {
 		GM_log("False alarm, this isn't a quicklove page. Exiting.");
 		return false;
 	}
