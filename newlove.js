@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           NewLove
 // @namespace      http://www.grinnellplans.com
-// @description    Highlights new planlove in the quicklove page.
+// @description    Shows only new planlove in the quicklove page.
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // ==/UserScript==
 
