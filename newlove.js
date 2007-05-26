@@ -12,7 +12,7 @@ function getAuthor(node) {
 }
 
 // Check given item against all members of the given array. Returns true if the item is found in the array
-function array_contains(arr, obj) {
+function arrayContains(arr, obj) {
 	if (!arr) return false;
 	for (var i=0; i<arr.length; i++) {
 		//GM_log("Checking string\n" + obj + "\nagainst\n" + arr[i]);
@@ -22,6 +22,19 @@ function array_contains(arr, obj) {
 		}
 	}
 	return false;
+}
+
+// Reset the username and history (simulate a fresh install)
+function resetValues(e) {
+	if (window.confirm("Reset username and saved planlove?")) {
+		GM_setValue("username", "");
+		GM_setValue("planloveHash", "");
+	}
+}
+
+// Do not count new planlove as read
+function saveOldlove() {
+	GM_setValue("planloveHash", oldlove.toSource());
 }
 
 // Figure out if this is actually the quicklove page, as opposed to 
@@ -47,6 +60,10 @@ function array_contains(arr, obj) {
 		return false;
 	}
 
+// Add items to the menu
+GM_registerMenuCommand("Reset username", resetValues, "", "", "R");
+GM_registerMenuCommand("Save as unread", saveOldlove, "", "", "u");
+
 var startTime = new Date();
 var origTime = new Date();
 
@@ -62,12 +79,14 @@ var timeDiff1 = new Date() - startTime;
 
 startTime = new Date();
 // Get the stored planlove from last time
-oldlove_str = GM_getValue("planlove_hash");
+oldlove_str = GM_getValue("planloveHash");
 // Convert from the stored string to a hashtable of arrays
 try {
-	oldlove = eval(oldlove_str);
+	var oldlove = eval(oldlove_str);
+	// Test it to see if it's null
+	oldlove["foo"];
 } catch (e) { 
-	oldlove = {};
+	var oldlove = {};
 }
 newlove = {}
 var timeDiff2 = new Date() - startTime;
@@ -82,7 +101,7 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	content = foo.innerHTML;
 
 	// Check each lovin' against list of author's previous lovin'
-	if (!array_contains(oldlove[author], content)) {
+	if (!arrayContains(oldlove[author], content)) {
 		// It's new, highlight it
 		//foo.style.backgroundColor = "blue";
 		// Also add "newlove" class to it
@@ -111,7 +130,7 @@ startTime = new Date();
 //alert(newlove.toSource());
 	// Store the new list value as a string (hacked this way because
 	// we can only store strings, ints, and booleans
-	GM_setValue("planlove_hash", newlove.toSource());
+	GM_setValue("planloveHash", newlove.toSource());
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
 
