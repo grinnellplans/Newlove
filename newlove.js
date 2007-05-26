@@ -28,18 +28,24 @@ function array_contains(arr, obj) {
 // a regular search. Hackity hack!
 	username = GM_getValue("username");
 	if (!username) {
-		// We need to determine the username
-		username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.").toLowerCase();
+		// We need to determine the username. Let's make a guess based on
+		// the current url of the page.
+		var urly = window.location.href;
+		var startIndex = urly.indexOf("mysearch=") + 9;
+		var endIndex = urly.indexOf("&", startIndex);
+		var guessUsername = urly.substring(startIndex, endIndex);
+
+		// Now ask for confirmation
+		username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
 		if (!username) return false;
 		GM_setValue("username", username);
 	}
 	// Now, if the page we're currently on isn't searching for that
 	// username, fuggedaboudit.
-	if (window.location.href.indexOf(username) == -1) {
+	if (window.location.href.indexOf(username) == -1 && username != "everyone") {
 		GM_log("False alarm, this isn't a quicklove page. Exiting.");
 		return false;
 	}
-alert(window.location.href.indexOf(username));
 
 var startTime = new Date();
 var origTime = new Date();
