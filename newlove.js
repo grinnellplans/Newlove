@@ -2,22 +2,23 @@
 (c) Ian Young 2007
 
 This program is free software; you can redistribute it and/or modify it 
-under the terms of the GNU General Public License as published by the Free 
-Software Foundation; either version 2 of the License, or (at your option) 
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
 any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT 
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
-FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for 
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
 more details.
 
-You should have received a copy of the GNU General Public License along 
-with this program; if not, write to the Free Software Foundation, Inc., 59 
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc., 59
 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
 // Revision History
 // 1.0 - Initial release.
+// 1.1 - Added ability to watch everyone's quicklove
 
 // ==UserScript==
 // @name           NewLove
@@ -49,19 +50,19 @@ function arrayContains(arr, obj) {
 function resetValues(e) {
 	if (window.confirm("Reset username and saved planlove?")) {
 		GM_setValue("username", "");
-		GM_setValue("planloveHash", "");
+		GM_setValue("planloveHash" + guessUsername, "");
 	}
 }
 
 // Do not count new planlove as read
 function saveOldlove() {
-	GM_setValue("planloveHash", oldlove.toSource());
+	GM_setValue("planloveHash" + guessUsername, oldlove.toSource());
 }
 
 // Figure out if this is actually the quicklove page, as opposed to 
 // a regular search. Hackity hack!
 	username = GM_getValue("username");
-	if (!username) {
+
 		// We need to determine the username. Let's make a guess based on
 		// the current url of the page.
 		var urly = window.location.href;
@@ -69,14 +70,15 @@ function saveOldlove() {
 		var endIndex = urly.indexOf("&", startIndex);
 		var guessUsername = urly.substring(startIndex, endIndex);
 
-		// Now ask for confirmation
+	if (!username) {
+		// Ask for confirmation of the username
 		username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
-		if (!username) return false;
+		if (!username) return false; // give up
 		GM_setValue("username", username);
 	}
 	// Now, if the page we're currently on isn't searching for that
 	// username, fuggedaboudit.
-	if (window.location.href.indexOf(username) == -1 && username != "everyone") {
+	if (username != guessUsername && username != "everyone") {
 		GM_log("False alarm, this isn't a quicklove page. Exiting.");
 		return false;
 	}
@@ -100,7 +102,7 @@ var timeDiff1 = new Date() - startTime;
 
 startTime = new Date();
 // Get the stored planlove from last time
-oldlove_str = GM_getValue("planloveHash");
+oldlove_str = GM_getValue("planloveHash" + guessUsername);
 // Convert from the stored string to a hashtable of arrays
 try {
 	var oldlove = eval(oldlove_str);
@@ -142,7 +144,7 @@ startTime = new Date();
 //alert(newlove.toSource());
 	// Store the new list value as a string (hacked this way because
 	// we can only store strings, ints, and booleans
-	GM_setValue("planloveHash", newlove.toSource());
+	GM_setValue("planloveHash" + guessUsername, newlove.toSource());
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
 
