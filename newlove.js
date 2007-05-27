@@ -102,7 +102,6 @@ var timeDiff1 = new Date() - startTime;
 
 startTime = new Date();
 // Get the stored planlove from last time
-var extra = "";
 oldlove_str = GM_getValue("planloveHash" + guessUsername);
 // Convert from the stored string to a hashtable of arrays
 try {
