@@ -21,7 +21,7 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA
 // 1.3 - Added ability to watch everyone's quicklove
 
 // ==UserScript==
-// @name           NewLove
+// @name           NewLove Only
 // @namespace      http://www.grinnellplans.com
 // @description    Shows only new planlove in the quicklove page.
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
