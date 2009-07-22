@@ -27,6 +27,11 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // ==/UserScript==
 
+/* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
+String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g, "");
+}; 
+
 // Gets the name of the author a given result is associated with
 function getAuthor(node) {
 	var links = node.getElementsByTagName('a');
@@ -38,7 +43,7 @@ function arrayContains(arr, obj) {
 	if (!arr) return false;
 	for (var i=0; i<arr.length; i++) {
 		//GM_log("Checking string\n" + obj + "\nagainst\n" + arr[i]);
-		if (arr[i] == obj) {
+		if (arr[i].trim == obj.trim) {
 			//GM_log("Match found");
 			return true;
 		}
@@ -92,7 +97,7 @@ var origTime = new Date();
 
 // Find all 'sub-lists' in the page
 var loves = document.evaluate(
-	'//ul/li/ul/li',
+	'//ul[@id="search_results"]/li/*/ul/li',
 	document,
 	null,
 	XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
@@ -121,7 +126,7 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	foo = loves.snapshotItem(i);
 	var author = getAuthor(foo.parentNode.parentNode);
 
-	content = foo.innerHTML;
+	content = foo.firstChild.innerHTML;
 
 	// Check each lovin' against list of author's previous lovin'
 	if (arrayContains(oldlove[author], content)) {
