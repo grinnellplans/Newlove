@@ -97,7 +97,7 @@ var origTime = new Date();
 
 // Find all 'sub-lists' in the page
 var loves = document.evaluate(
-	'//ul[@id="search_results"]/li/*/ul/li',
+	'//ul[@id="search_results"]/li//ul/li',
 	document,
 	null,
 	XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
