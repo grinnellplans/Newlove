@@ -43,7 +43,7 @@ function arrayContains(arr, obj) {
 	if (!arr) return false;
 	for (var i=0; i<arr.length; i++) {
 		//GM_log("Checking string\n" + obj + "\nagainst\n" + arr[i]);
-		if (arr[i].trim == obj.trim) {
+		if (arr[i].trim() == obj.trim()) {
 			//GM_log("Match found");
 			return true;
 		}
