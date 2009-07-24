@@ -1,19 +1,19 @@
 /*
-(c) Ian Young 2007
+   (c) Ian Young 2007
 
-This program is free software; you can redistribute it and/or modify it 
-under the terms of the GNU General Public License as published by the Free
-Software Foundation; either version 2 of the License, or (at your option)
-any later version.
+   This program is free software; you can redistribute it and/or modify it 
+   under the terms of the GNU General Public License as published by the Free
+   Software Foundation; either version 2 of the License, or (at your option)
+   any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-more details.
+   This program is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+   more details.
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc., 59
-Temple Place, Suite 330, Boston, MA 02111-1307 USA 
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc., 59
+   Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
 // Revision History
@@ -29,7 +29,7 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
 String.prototype.trim = function () {
-    return this.replace(/^\s+|\s+$/g, "");
+	return this.replace(/^\s+|\s+$/g, "");
 }; 
 
 // Gets the name of the author a given result is associated with
@@ -66,27 +66,27 @@ function saveOldlove() {
 
 // Figure out if this is actually the quicklove page, as opposed to 
 // a regular search. Hackity hack!
-	username = GM_getValue("username");
+username = GM_getValue("username");
 
-		// We need to determine the username. Let's make a guess based on
-		// the current url of the page.
-		var urly = window.location.href;
-		var startIndex = urly.indexOf("mysearch=") + 9;
-		var endIndex = urly.indexOf("&", startIndex);
-		var guessUsername = urly.substring(startIndex, endIndex);
+// We need to determine the username. Let's make a guess based on
+// the current url of the page.
+var urly = window.location.href;
+var startIndex = urly.indexOf("mysearch=") + 9;
+var endIndex = urly.indexOf("&", startIndex);
+var guessUsername = urly.substring(startIndex, endIndex);
 
-	if (!username) {
-		// Ask for confirmation of the username
-		username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
-		if (!username) return false; // give up
-		GM_setValue("username", username);
-	}
-	// Now, if the page we're currently on isn't searching for that
-	// username, fuggedaboudit.
-	if (username != guessUsername && username != "everyone") {
-		GM_log("False alarm, this isn't a quicklove page. Exiting.");
-		return false;
-	}
+if (!username) {
+	// Ask for confirmation of the username
+	username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
+	if (!username) return false; // give up
+	GM_setValue("username", username);
+}
+// Now, if the page we're currently on isn't searching for that
+// username, fuggedaboudit.
+if (username != guessUsername && username != "everyone") {
+	GM_log("False alarm, this isn't a quicklove page. Exiting.");
+	return false;
+}
 
 // Add items to the menu
 GM_registerMenuCommand("Reset username", resetValues, "", "", "R");
@@ -97,11 +97,11 @@ var origTime = new Date();
 
 // Find all 'sub-lists' in the page
 var loves = document.evaluate(
-	'//ul[@id="search_results"]/li//ul/li',
-	document,
-	null,
-	XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
-	null);
+		'//ul[@id="search_results"]/li//ul/li',
+		document,
+		null,
+		XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+		null);
 
 var timeDiff1 = new Date() - startTime;
 
@@ -155,10 +155,9 @@ for (var i=0; i<loves.snapshotLength; i++) {
 var timeDiff3 = new Date() - startTime;
 
 startTime = new Date();
-//alert(newlove.toSource());
-	// Store the new list value as a string (hacked this way because
-	// we can only store strings, ints, and booleans
-	GM_setValue("planloveHash" + guessUsername, newlove.toSource());
+// Store the new list value as a string (hacked this way because
+// we can only store strings, ints, and booleans
+GM_setValue("planloveHash" + guessUsername, newlove.toSource());
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
 
