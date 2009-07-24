@@ -17,8 +17,8 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
 // Revision History
-// 1.1 - Initial release.
-// 1.3 - Added ability to watch everyone's quicklove
+// 1.0 - Initial release.
+// 1.1 - Added ability to watch everyone's quicklove
 
 // ==UserScript==
 // @name           NewLove Only
