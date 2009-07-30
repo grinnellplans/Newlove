@@ -8,7 +8,7 @@ Installation
 
 1. You will need to be using Firefox (or Opera) to use this script.
 
-2. You need to install the Greasemonkey extension if you don't have it already. Greasemonkey allows user-generated scripts like mine to modify how pages are displayed. It has a lot of neat uses besides my script. You can find it [here](http://www.greasespot.net).
+2. You need to install the Greasemonkey extension if you don't have it already. Greasemonkey allows user-generated scripts like mine to modify how pages are displayed. It has a lot of neat uses besides my script. You can find it [here](https://addons.mozilla.org/en-US/firefox/addon/748).
 
 3. Now that you have Greasemonkey installed, you're ready to add my script. [Click here](http://github.com/youngian/GrinnellPlans-Newlove/raw/master/newlove.user.js). A box should show up asking you if you want to install the script. Do so. If the box doesn't show up, click on _Tools->Greasemonkey->Install User Script..._ (you must first navigate to the script for this option to not be grayed out).
 
