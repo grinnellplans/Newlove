@@ -24,6 +24,7 @@
 // @namespace      http://www.grinnellplans.com
 // @description    Shows only new planlove in the quicklove page.
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
+// @include        http://grinnellplans.com/search.php?mysearch=*&planlove=1*
 // ==/UserScript==
 
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
