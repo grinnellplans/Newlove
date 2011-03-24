@@ -18,7 +18,7 @@
 // Revision History
 // 1.0 - Initial release
 // 1.1 - Added ability to watch everyone's quicklove
-
+// 1.1c - Erin [nichols] reworked this to work in chrome! (works in firefox too!)
 // ==UserScript==
 // @name           NewLove
 // @namespace      http://www.grinnellplans.com
@@ -26,6 +26,98 @@
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @include        http://grinnellplans.com/search.php?mysearch=*&planlove=1*
 // ==/UserScript==
+
+// credit Joe Simmons http://greasefire.userscripts.org/users/JoeSimmons
+var isGM = (typeof getValue != 'undefined' && typeof getValue('a', 'b') != 'undefined'),
+getValue = (isGM ? getValue : (function(name, def) {var s=localStorage.getItem(name); return (s=="undefined" || s=="null") ? def : s})),
+setValue = (isGM ? setValue : (function(name, value) {return localStorage.setItem(name, value)})),
+deleteValue = (isGM ? GM_deleteValue : (function(name, def) {return localStorage.setItem(name, def)}));
+
+/**
+ * Credit Jesse Mwaura
+ * Return this object formatted as a <a href="http://en.wikipedia.org/wiki/JSON">JSON</a> <code>String</code>.
+ * @returns A <code>String</code> representing this object in JSON format.
+ * @type String
+ */
+Object.prototype.toJSON = function() {
+	var opts=arguments[0] || {functions:false};
+	switch (typeof this) {
+	
+		case 'object':
+			if (this) {
+				var list = [];
+				if (undefined === this.getClass) {
+					if (this instanceof Array) {
+						for (var i = 0; i < this.length;i++) {
+							if (this[i] === null) {
+								list.push('null');
+							} else if (this[i] === undefined) {
+								list.push('undefined');
+							} else if (undefined !== this[i].getClass){
+								list.push(String(this[i].toString()).toJSON(opts));
+							} else if(opts.functions==false && typeof this[prop]=='function'){
+								continue;
+							} else {
+								list.push(this[i].toJSON(opts));
+							}
+						}
+						return '[' + list.join(',') + ']';
+					} else {
+						for (var prop in this) {
+							if (this[prop] === null) {
+								list.push('"' + prop + '": null');
+							} else if (this[prop] === undefined) {
+								list.push('"' + prop + '": undefined');
+							} else if (undefined !== this[prop].getClass){
+								list.push('"' + prop + '":' + String(this[prop].toString()).toJSON(opts));
+							} else if (opts.functions==false && typeof this[prop]=='function'){
+								continue;
+							} else {
+								list.push('"' + prop + '":' + this[prop].toJSON(opts));
+							}
+						}
+						return '{' + list.join(',') + '}';
+					}
+				} else { 
+					return '"' + String(this).replace(/\\/g, "\\\\")
+						.replace(/["]/g, "\\\"") + '"';
+				}
+			} else {
+				return 'null';
+			}
+		case 'function':	
+		case 'string':
+		case 'number':
+		case 'boolean':
+			return this.toJSON(opts);
+	}
+}
+
+Function.prototype.toJSON = function(){
+	var opts=arguments[0] || {functions:false};
+	if (opts.functions) return this.toString();
+	else return undefined;
+	
+}
+	
+String.prototype.toJSON = function() {
+	return '"' + String(this).replace(/["]/g, '\\\"')
+		.replace(/\n/g, '\\n')
+		.replace(/\r/g, '')
+		.replace(/\t/g, '\\t')+ '"';
+}
+
+Boolean.prototype.toJSON = function() {
+	return this.toString();
+}
+	
+Number.prototype.toJSON = function() {
+	return this.toString();
+}
+
+Date.prototype.toJSON = function(){
+	return this.toString().toJSON();
+}
 
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
 String.prototype.trim = function () {
@@ -54,19 +146,19 @@ function arrayContains(arr, obj) {
 // Reset the username and history (simulate a fresh install)
 function resetValues(e) {
 	if (window.confirm("Reset username and saved planlove?")) {
-		GM_setValue("username", "");
-		GM_setValue("planloveHash" + guessUsername, "");
+		setValue("username", "");
+		setValue("planloveHash" + guessUsername, "");
 	}
 }
 
 // Do not count new planlove as read
 function saveOldlove() {
-	GM_setValue("planloveHash" + guessUsername, oldlove.toSource());
+	setValue("planloveHash" + guessUsername, oldlove.toJSON());
 }
 
 // Figure out if this is actually the quicklove page, as opposed to 
 // a regular search. Hackity hack!
-username = GM_getValue("username");
+username = getValue("username");
 
 // We need to determine the username. Let's make a guess based on
 // the current url of the page.
@@ -74,12 +166,11 @@ var urly = window.location.href;
 var startIndex = urly.indexOf("mysearch=") + 9;
 var endIndex = urly.indexOf("&", startIndex);
 var guessUsername = urly.substring(startIndex, endIndex);
-
 if (!username) {
 	// Ask for confirmation of the username
 	username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
 	if (!username) return false; // give up
-	GM_setValue("username", username);
+	setValue("username", username);
 }
 // Now, if the page we're currently on isn't searching for that
 // username, fuggedaboudit.
@@ -106,11 +197,13 @@ var loves = document.evaluate(
 var timeDiff1 = new Date() - startTime;
 
 startTime = new Date();
+
 // Get the stored planlove from last time
-oldlove_str = GM_getValue("planloveHash" + guessUsername);
+oldlove_str = getValue("planloveHash" + guessUsername);
+
 // Convert from the stored string to a hashtable of arrays
 try {
-	var oldlove = eval(oldlove_str);
+	var oldlove = eval("(" + oldlove_str + ")");
 	// Test it to see if it's null
 	oldlove["foo"];
 } catch (e) { 
@@ -141,15 +234,16 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	// Add it to the new list of planlove
 	temp_arr[temp_arr.length] = content;
 	newlove[author] = temp_arr;
-
 }
 var timeDiff3 = new Date() - startTime;
-
 startTime = new Date();
 // Store the new list value as a string (hacked this way because
 // we can only store strings, ints, and booleans
-GM_setValue("planloveHash" + guessUsername, newlove.toSource());
+try{
+    setValue("planloveHash" + guessUsername, newlove.toSource());
+} catch(e) {
+    setValue("planloveHash" + guessUsername, newlove.toJSON());
+}
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
-
 GM_log("Time spent: (1) " + timeDiff1 + " (2) " + timeDiff2 + " (3) " + timeDiff3 + " (4) " + timeDiff4 + " (total) " +  timeDiffTot);
