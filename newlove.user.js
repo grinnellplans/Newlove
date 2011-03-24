@@ -18,7 +18,8 @@
 // Revision History
 // 1.0 - Initial release
 // 1.1 - Added ability to watch everyone's quicklove
-// 1.1c - Erin [nichols] reworked this to work in chrome! (works in firefox too!)
+// 1.2 - Erin [nichols] reworked this to work in Chrome!
+// 1.3 - Use native JSON for storage, fix problems with FF4
 // ==UserScript==
 // @name           NewLove
 // @namespace      http://www.grinnellplans.com
