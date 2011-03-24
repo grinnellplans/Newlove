@@ -206,8 +206,15 @@ try {
 	var oldlove = eval("(" + oldlove_str + ")");
 	// Test it to see if it's null
 	oldlove["foo"];
-} catch (e) { 
-	var oldlove = {};
+} catch (e) {
+    try {
+        // In case we're upgrading from the old storage method
+        var oldlove = eval( oldlove_str );
+        // Test it to see if it's null
+        oldlove["foo"];
+    } catch (e) {
+        var oldlove = {};
+    }
 }
 newlove = {}
 var timeDiff2 = new Date() - startTime;
@@ -237,13 +244,7 @@ for (var i=0; i<loves.snapshotLength; i++) {
 }
 var timeDiff3 = new Date() - startTime;
 startTime = new Date();
-// Store the new list value as a string (hacked this way because
-// we can only store strings, ints, and booleans
-try{
-    setValue("planloveHash" + guessUsername, newlove.toSource());
-} catch(e) {
-    setValue("planloveHash" + guessUsername, newlove.toJSON());
-}
+setValue("planloveHash" + guessUsername, newlove.toJSON());
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
 GM_log("Time spent: (1) " + timeDiff1 + " (2) " + timeDiff2 + " (3) " + timeDiff3 + " (4) " + timeDiff4 + " (total) " +  timeDiffTot);
