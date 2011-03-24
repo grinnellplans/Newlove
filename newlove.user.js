@@ -33,92 +33,6 @@ getValue = (isGM ? getValue : (function(name, def) {var s=localStorage.getItem(n
 setValue = (isGM ? setValue : (function(name, value) {return localStorage.setItem(name, value)})),
 deleteValue = (isGM ? GM_deleteValue : (function(name, def) {return localStorage.setItem(name, def)}));
 
-/**
- * Credit Jesse Mwaura
- * Return this object formatted as a <a href="http://en.wikipedia.org/wiki/JSON">JSON</a> <code>String</code>.
- * @returns A <code>String</code> representing this object in JSON format.
- * @type String
- */
-Object.prototype.toJSON = function() {
-	var opts=arguments[0] || {functions:false};
-	switch (typeof this) {
-	
-		case 'object':
-			if (this) {
-				var list = [];
-				if (undefined === this.getClass) {
-					if (this instanceof Array) {
-						for (var i = 0; i < this.length;i++) {
-							if (this[i] === null) {
-								list.push('null');
-							} else if (this[i] === undefined) {
-								list.push('undefined');
-							} else if (undefined !== this[i].getClass){
-								list.push(String(this[i].toString()).toJSON(opts));
-							} else if(opts.functions==false && typeof this[prop]=='function'){
-								continue;
-							} else {
-								list.push(this[i].toJSON(opts));
-							}
-						}
-						return '[' + list.join(',') + ']';
-					} else {
-						for (var prop in this) {
-							if (this[prop] === null) {
-								list.push('"' + prop + '": null');
-							} else if (this[prop] === undefined) {
-								list.push('"' + prop + '": undefined');
-							} else if (undefined !== this[prop].getClass){
-								list.push('"' + prop + '":' + String(this[prop].toString()).toJSON(opts));
-							} else if (opts.functions==false && typeof this[prop]=='function'){
-								continue;
-							} else {
-								list.push('"' + prop + '":' + this[prop].toJSON(opts));
-							}
-						}
-						return '{' + list.join(',') + '}';
-					}
-				} else { 
-					return '"' + String(this).replace(/\\/g, "\\\\")
-						.replace(/["]/g, "\\\"") + '"';
-				}
-			} else {
-				return 'null';
-			}
-		case 'function':	
-		case 'string':
-		case 'number':
-		case 'boolean':
-			return this.toJSON(opts);
-	}
-}
-
-Function.prototype.toJSON = function(){
-	var opts=arguments[0] || {functions:false};
-	if (opts.functions) return this.toString();
-	else return undefined;
-	
-}
-	
-String.prototype.toJSON = function() {
-	return '"' + String(this).replace(/["]/g, '\\\"')
-		.replace(/\n/g, '\\n')
-		.replace(/\r/g, '')
-		.replace(/\t/g, '\\t')+ '"';
-}
-
-Boolean.prototype.toJSON = function() {
-	return this.toString();
-}
-	
-Number.prototype.toJSON = function() {
-	return this.toString();
-}
-
-Date.prototype.toJSON = function(){
-	return this.toString().toJSON();
-}
-
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
 String.prototype.trim = function () {
 	return this.replace(/^\s+|\s+$/g, "");
@@ -153,7 +67,7 @@ function resetValues(e) {
 
 // Do not count new planlove as read
 function saveOldlove() {
-	setValue("planloveHash" + guessUsername, oldlove.toJSON());
+	setValue("planloveHash" + guessUsername, JSON.stringify(oldlove));
 }
 
 // Figure out if this is actually the quicklove page, as opposed to 
@@ -203,7 +117,7 @@ oldlove_str = getValue("planloveHash" + guessUsername);
 
 // Convert from the stored string to a hashtable of arrays
 try {
-	var oldlove = eval("(" + oldlove_str + ")");
+	var oldlove = JSON.parse( oldlove_str );
 	// Test it to see if it's null
 	oldlove["foo"];
 } catch (e) {
@@ -244,7 +158,7 @@ for (var i=0; i<loves.snapshotLength; i++) {
 }
 var timeDiff3 = new Date() - startTime;
 startTime = new Date();
-setValue("planloveHash" + guessUsername, newlove.toJSON());
+setValue("planloveHash" + guessUsername, JSON.stringify(newlove));
 var timeDiff4 = new Date() - startTime;
 var timeDiffTot = new Date() - origTime;
 GM_log("Time spent: (1) " + timeDiff1 + " (2) " + timeDiff2 + " (3) " + timeDiff3 + " (4) " + timeDiff4 + " (total) " +  timeDiffTot);
