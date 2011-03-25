@@ -98,9 +98,6 @@ if (username != guessUsername && username != "everyone") {
 GM_registerMenuCommand("Reset username", resetValues, "", "", "R");
 GM_registerMenuCommand("Save as unread", saveOldlove, "", "", "u");
 
-var startTime = new Date();
-var origTime = new Date();
-
 // Find all 'sub-lists' in the page
 var loves = document.evaluate(
 		'//ul[@id="search_results"]/li//ul/li',
@@ -108,10 +105,6 @@ var loves = document.evaluate(
 		null,
 		XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
 		null);
-
-var timeDiff1 = new Date() - startTime;
-
-startTime = new Date();
 
 // Get the stored planlove from last time
 oldlove_str = getValue("planloveHash" + guessUsername);
@@ -132,9 +125,7 @@ try {
     }
 }
 newlove = {}
-var timeDiff2 = new Date() - startTime;
 
-startTime = new Date();
 // Iterate through the list of search results
 var foo;
 for (var i=0; i<loves.snapshotLength; i++) {
@@ -157,9 +148,4 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	temp_arr[temp_arr.length] = content;
 	newlove[author] = temp_arr;
 }
-var timeDiff3 = new Date() - startTime;
-startTime = new Date();
 setValue("planloveHash" + guessUsername, JSON.stringify(newlove));
-var timeDiff4 = new Date() - startTime;
-var timeDiffTot = new Date() - origTime;
-GM_log("Time spent: (1) " + timeDiff1 + " (2) " + timeDiff2 + " (3) " + timeDiff3 + " (4) " + timeDiff4 + " (total) " +  timeDiffTot);
