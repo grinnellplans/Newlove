@@ -42,7 +42,7 @@ String.prototype.trim = function () {
 // Gets the name of the author a given result is associated with
 function getAuthor(node) {
 	var links = node.getElementsByTagName('a');
-	return links[0].innerHTML;
+	return links[0].textContent;
 }
 
 // Check given item against all members of the given array. Returns true if the item is found in the array
@@ -103,7 +103,7 @@ var loves = document.evaluate(
 		'//ul[@id="search_results"]/li//ul/li',
 		document,
 		null,
-		XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+		XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
 		null);
 
 // Get the stored planlove from last time
@@ -124,20 +124,20 @@ try {
         var oldlove = {};
     }
 }
-newlove = {}
+var newlove = {};
+var toRemove = []
 
 // Iterate through the list of search results
 var foo;
-for (var i=0; i<loves.snapshotLength; i++) {
-	foo = loves.snapshotItem(i);
+while ( foo = loves.iterateNext() ) {
 	var author = getAuthor(foo.parentNode.parentNode);
 
-	content = foo.firstChild.innerHTML;
+	a_love = foo.textContent;
 
 	// Check each lovin' against list of author's previous lovin'
-	if (arrayContains(oldlove[author], content)) {
+	if (arrayContains(oldlove[author], a_love)) {
 		// It's old, remove it
-		foo.parentNode.removeChild(foo);
+		toRemove.push( foo );
 	}
 
 	// Fetch the array of planlove for the current author
@@ -148,4 +148,8 @@ for (var i=0; i<loves.snapshotLength; i++) {
 	temp_arr[temp_arr.length] = content;
 	newlove[author] = temp_arr;
 }
+
+toRemove.forEach( function( n ) {
+    n.parentNode.removeChild( n );
+});
 setValue("planloveHash" + guessUsername, JSON.stringify(newlove));
