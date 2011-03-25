@@ -49,9 +49,7 @@ function getAuthor(node) {
 function arrayContains(arr, obj) {
 	if (!arr) return false;
 	for (var i=0; i<arr.length; i++) {
-		//GM_log("Checking string\n" + obj + "\nagainst\n" + arr[i]);
 		if (arr[i].trim() == obj.trim()) {
-			//GM_log("Match found");
 			return true;
 		}
 	}
@@ -117,7 +115,10 @@ try {
 } catch (e) {
     var oldlove = {};
 }
+
+// A running list of all quicklove received
 var newlove = {};
+// Read quicklove, to be hidden
 var toRemove = []
 
 // Iterate through the list of search results
@@ -129,7 +130,7 @@ while ( foo = loves.iterateNext() ) {
 
 	// Check each lovin' against list of author's previous lovin'
 	if (arrayContains(oldlove[author], a_love)) {
-		// It's old, remove it
+		// Mark for removal
 		toRemove.push( foo );
 	}
 
@@ -141,7 +142,10 @@ while ( foo = loves.iterateNext() ) {
 	newlove[author].push( a_love );
 }
 
+// Now remove all old love
 toRemove.forEach( function( n ) {
     n.parentNode.removeChild( n );
 });
+
+// Store the new list of planlove, for next time
 setValue("planloveHash" + guessUsername, JSON.stringify(newlove));
