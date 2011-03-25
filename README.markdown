@@ -3,16 +3,22 @@ GrinnellPlans Newlove Script
 
 This is a script that lets you easily find newly added planlove on your quicklove page. It runs under the Greasemonkey extension to Firefox.
 
+Supported Browsers
+------------------
+
+ * Firefox 3.5+
+ * Chrome 4+
+ * [Opera?](http://www.opera.com/docs/userjs/using/#writingscripts)
+ * For a Safari extension, see [johnsonn]
+
 Installation
 ------------
 
-1. You will need to be using Firefox (or Opera) to use this script.
+1. If using Firefox, you need to install the [Greasemonkey extension](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) before you continue. If using Chrome, skip to the next step.
 
-2. You need to install the Greasemonkey extension if you don't have it already. Greasemonkey allows user-generated scripts like mine to modify how pages are displayed. It has a lot of neat uses besides my script. You can find it [here](https://addons.mozilla.org/en-US/firefox/addon/748).
+2. [Click here](https://github.com/youngian/GrinnellPlans-Newlove/raw/master/newlove.user.js). A box should show up asking you if you want to install the script. Do so. If the box doesn't show up, click on _Tools->Greasemonkey->Install User Script..._ (you must first navigate to the script for this option to not be grayed out).
 
-3. Now that you have Greasemonkey installed, you're ready to add my script. [Click here](https://github.com/youngian/GrinnellPlans-Newlove/raw/master/newlove.user.js). A box should show up asking you if you want to install the script. Do so. If the box doesn't show up, click on _Tools->Greasemonkey->Install User Script..._ (you must first navigate to the script for this option to not be grayed out).
-
-4. Now go to your quicklove page. A box should pop up asking for your username. Assuming it has guessed correctly, click 'Ok' and you're all set. Check out Usage below for more options. 
+3. Now go to your quicklove page. A box should pop up asking for your username. Assuming it has guessed correctly, click 'Ok' and you're all set. Check out Usage below for more options. 
 
 Usage
 -----
