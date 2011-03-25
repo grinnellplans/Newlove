@@ -143,10 +143,9 @@ while ( foo = loves.iterateNext() ) {
 	// Fetch the array of planlove for the current author
 	var temp_arr = newlove[author];
 	// Create it if it doesn't exist
-	if (!temp_arr) { temp_arr = []; }
+	if (!newlove[author]) { newlove[author] = []; }
 	// Add it to the new list of planlove
-	temp_arr[temp_arr.length] = content;
-	newlove[author] = temp_arr;
+	newlove[author].push( a_love );
 }
 
 toRemove.forEach( function( n ) {
