@@ -122,16 +122,16 @@ var newlove = {};
 var toRemove = []
 
 // Iterate through the list of search results
-var foo;
-while ( foo = loves.iterateNext() ) {
-    var author = getAuthor(foo.parentNode.parentNode);
+var thisLoveNode;
+while ( thisLoveNode = loves.iterateNext() ) {
+    var author = getAuthor(thisLoveNode.parentNode.parentNode);
 
-    a_love = foo.textContent;
+    thisLoveText = thisLoveNode.textContent;
 
     // Check each lovin' against list of author's previous lovin'
-    if (arrayContains(oldlove[author], a_love)) {
+    if (arrayContains(oldlove[author], thisLoveText)) {
         // Mark for removal
-        toRemove.push( foo );
+        toRemove.push( thisLoveNode );
     }
 
     // Fetch the array of planlove for the current author
@@ -139,7 +139,7 @@ while ( foo = loves.iterateNext() ) {
     // Create it if it doesn't exist
     if (!newlove[author]) { newlove[author] = []; }
     // Add it to the new list of planlove
-    newlove[author].push( a_love );
+    newlove[author].push( thisLoveText );
 }
 
 // Now remove all old love
