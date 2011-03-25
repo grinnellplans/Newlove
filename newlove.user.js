@@ -30,46 +30,46 @@
 
 // credit Joe Simmons http://greasefire.userscripts.org/users/JoeSimmons
 var isGM = (typeof getValue != 'undefined' && typeof getValue('a', 'b') != 'undefined'),
-getValue = (isGM ? getValue : (function(name, def) {var s=localStorage.getItem(name); return (s=="undefined" || s=="null") ? def : s})),
-setValue = (isGM ? setValue : (function(name, value) {return localStorage.setItem(name, value)})),
-deleteValue = (isGM ? GM_deleteValue : (function(name, def) {return localStorage.setItem(name, def)}));
+    getValue = (isGM ? getValue : (function(name, def) {var s=localStorage.getItem(name); return (s=="undefined" || s=="null") ? def : s})),
+    setValue = (isGM ? setValue : (function(name, value) {return localStorage.setItem(name, value)})),
+    deleteValue = (isGM ? GM_deleteValue : (function(name, def) {return localStorage.setItem(name, def)}));
 
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
 String.prototype.trim = function () {
-	return this.replace(/^\s+|\s+$/g, "");
-}; 
+    return this.replace(/^\s+|\s+$/g, "");
+};
 
 // Gets the name of the author a given result is associated with
 function getAuthor(node) {
-	var links = node.getElementsByTagName('a');
-	return links[0].textContent;
+    var links = node.getElementsByTagName('a');
+    return links[0].textContent;
 }
 
 // Check given item against all members of the given array. Returns true if the item is found in the array
 function arrayContains(arr, obj) {
-	if (!arr) return false;
-	for (var i=0; i<arr.length; i++) {
-		if (arr[i].trim() == obj.trim()) {
-			return true;
-		}
-	}
-	return false;
+    if (!arr) return false;
+    for (var i=0; i<arr.length; i++) {
+        if (arr[i].trim() == obj.trim()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Reset the username and history (simulate a fresh install)
 function resetValues(e) {
-	if (window.confirm("Reset username and saved planlove?")) {
-		setValue("username", "");
-		setValue("planloveHash" + guessUsername, "");
-	}
+    if (window.confirm("Reset username and saved planlove?")) {
+        setValue("username", "");
+        setValue("planloveHash" + guessUsername, "");
+    }
 }
 
 // Do not count new planlove as read
 function saveOldlove() {
-	setValue("planloveHash" + guessUsername, JSON.stringify(oldlove));
+    setValue("planloveHash" + guessUsername, JSON.stringify(oldlove));
 }
 
-// Figure out if this is actually the quicklove page, as opposed to 
+// Figure out if this is actually the quicklove page, as opposed to
 // a regular search. Hackity hack!
 username = getValue("username");
 
@@ -80,16 +80,16 @@ var startIndex = urly.indexOf("mysearch=") + 9;
 var endIndex = urly.indexOf("&", startIndex);
 var guessUsername = urly.substring(startIndex, endIndex);
 if (!username) {
-	// Ask for confirmation of the username
-	username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
-	if (!username) return false; // give up
-	setValue("username", username);
+    // Ask for confirmation of the username
+    username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
+    if (!username) return false; // give up
+    setValue("username", username);
 }
 // Now, if the page we're currently on isn't searching for that
 // username, fuggedaboudit.
 if (username != guessUsername && username != "everyone") {
-	GM_log("False alarm, this isn't a quicklove page. Exiting.");
-	return false;
+    GM_log("False alarm, this isn't a quicklove page. Exiting.");
+    return false;
 }
 
 // Add items to the menu
@@ -98,20 +98,20 @@ GM_registerMenuCommand("Save as unread", saveOldlove, "", "", "u");
 
 // Find all 'sub-lists' in the page
 var loves = document.evaluate(
-		'//ul[@id="search_results"]/li//ul/li',
-		document,
-		null,
-		XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
-		null);
+        '//ul[@id="search_results"]/li//ul/li',
+        document,
+        null,
+        XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
+        null);
 
 // Get the stored planlove from last time
 oldlove_str = getValue("planloveHash" + guessUsername);
 
 // Convert from the stored string to a hashtable of arrays
 try {
-	var oldlove = JSON.parse( oldlove_str );
-	// Test it to see if it's null
-	oldlove["foo"];
+    var oldlove = JSON.parse( oldlove_str );
+    // Test it to see if it's null
+    oldlove["foo"];
 } catch (e) {
     var oldlove = {};
 }
@@ -124,22 +124,22 @@ var toRemove = []
 // Iterate through the list of search results
 var foo;
 while ( foo = loves.iterateNext() ) {
-	var author = getAuthor(foo.parentNode.parentNode);
+    var author = getAuthor(foo.parentNode.parentNode);
 
-	a_love = foo.textContent;
+    a_love = foo.textContent;
 
-	// Check each lovin' against list of author's previous lovin'
-	if (arrayContains(oldlove[author], a_love)) {
-		// Mark for removal
-		toRemove.push( foo );
-	}
+    // Check each lovin' against list of author's previous lovin'
+    if (arrayContains(oldlove[author], a_love)) {
+        // Mark for removal
+        toRemove.push( foo );
+    }
 
-	// Fetch the array of planlove for the current author
-	var temp_arr = newlove[author];
-	// Create it if it doesn't exist
-	if (!newlove[author]) { newlove[author] = []; }
-	// Add it to the new list of planlove
-	newlove[author].push( a_love );
+    // Fetch the array of planlove for the current author
+    var temp_arr = newlove[author];
+    // Create it if it doesn't exist
+    if (!newlove[author]) { newlove[author] = []; }
+    // Add it to the new list of planlove
+    newlove[author].push( a_love );
 }
 
 // Now remove all old love
