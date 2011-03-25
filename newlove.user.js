@@ -115,14 +115,7 @@ try {
 	// Test it to see if it's null
 	oldlove["foo"];
 } catch (e) {
-    try {
-        // In case we're upgrading from the old storage method
-        var oldlove = eval( oldlove_str );
-        // Test it to see if it's null
-        oldlove["foo"];
-    } catch (e) {
-        var oldlove = {};
-    }
+    var oldlove = {};
 }
 var newlove = {};
 var toRemove = []
