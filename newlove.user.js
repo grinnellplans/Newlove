@@ -28,12 +28,6 @@
 // @include        http://grinnellplans.com/search.php?mysearch=*&planlove=1*
 // ==/UserScript==
 
-// credit Joe Simmons http://greasefire.userscripts.org/users/JoeSimmons
-var isGM = (typeof getValue != 'undefined' && typeof getValue('a', 'b') != 'undefined'),
-    getValue = (isGM ? getValue : (function(name, def) {var s=localStorage.getItem(name); return (s=="undefined" || s=="null") ? def : s})),
-    setValue = (isGM ? setValue : (function(name, value) {return localStorage.setItem(name, value)})),
-    deleteValue = (isGM ? GM_deleteValue : (function(name, def) {return localStorage.setItem(name, def)}));
-
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
 String.prototype.trim = function () {
     return this.replace(/^\s+|\s+$/g, "");
@@ -59,19 +53,19 @@ function arrayContains(arr, obj) {
 // Reset the username and history (simulate a fresh install)
 function resetValues(e) {
     if (window.confirm("Reset username and saved planlove?")) {
-        setValue("username", "");
-        setValue("planloveHash" + guessUsername, "");
+        localStorage.removeItem("username");
+        localStorage.removeItem("planloveHash" + guessUsername);
     }
 }
 
 // Do not count new planlove as read
 function saveOldlove() {
-    setValue("planloveHash" + guessUsername, JSON.stringify(oldlove));
+    localStorage.setItem("planloveHash" + guessUsername, JSON.stringify(oldlove));
 }
 
 // Figure out if this is actually the quicklove page, as opposed to
 // a regular search. Hackity hack!
-username = getValue("username");
+username = localStorage.getItem("username");
 
 // We need to determine the username. Let's make a guess based on
 // the current url of the page.
@@ -83,7 +77,7 @@ if (!username) {
     // Ask for confirmation of the username
     username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
     if (!username) return false; // give up
-    setValue("username", username);
+    localStorage.setItem("username", username);
 }
 // Now, if the page we're currently on isn't searching for that
 // username, fuggedaboudit.
@@ -105,7 +99,7 @@ var loves = document.evaluate(
         null);
 
 // Get the stored planlove from last time
-oldlove_str = getValue("planloveHash" + guessUsername);
+oldlove_str = localStorage.getItem("planloveHash" + guessUsername);
 
 // Convert from the stored string to a hashtable of arrays
 try {
@@ -148,4 +142,4 @@ toRemove.forEach( function( n ) {
 });
 
 // Store the new list of planlove, for next time
-setValue("planloveHash" + guessUsername, JSON.stringify(newlove));
+localStorage.setItem("planloveHash" + guessUsername, JSON.stringify(newlove));
