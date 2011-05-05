@@ -16,7 +16,7 @@ Installation
 
 1. If using Firefox, you need to install the [Greasemonkey extension](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) before you continue. If using Chrome, skip to the next step.
 
-2. [Click here](https://github.com/youngian/GrinnellPlans-Newlove/raw/master/newlove.user.js). A box should show up asking you if you want to install the script. Do so. If the box doesn't show up, click on _Tools->Greasemonkey->Install User Script..._ (you must first navigate to the script for this option to not be grayed out).
+2. [Click here](https://github.com/iangreenleaf/GrinnellPlans-Newlove/raw/master/newlove.user.js). A box should show up asking you if you want to install the script. Do so. If the box doesn't show up, click on _Tools->Greasemonkey->Install User Script..._ (you must first navigate to the script for this option to not be grayed out).
 
 3. Now go to your quicklove page. A box should pop up asking for your username. Assuming it has guessed correctly, click 'Ok' and you're all set. Check out Usage below for more options. 
 
