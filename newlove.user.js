@@ -28,6 +28,10 @@
 // @match          http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @include        http://grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @match          http://grinnellplans.com/search.php?mysearch=*&planlove=1*
+// @include        https://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
+// @match          https://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
+// @include        https://grinnellplans.com/search.php?mysearch=*&planlove=1*
+// @match          https://grinnellplans.com/search.php?mysearch=*&planlove=1*
 // ==/UserScript==
 
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
