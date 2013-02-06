@@ -1,27 +1,29 @@
-GrinnellPlans Newlove Script
-============================
+# GrinnellPlans Newlove Script #
 
 This is a script that lets you easily find newly added planlove on your quicklove page. It runs under the Greasemonkey extension to Firefox.
 
-Supported Browsers
-------------------
+## Supported Browsers ##
 
  * Firefox 3.5+
  * Chrome 4+
  * [Opera?](http://www.opera.com/docs/userjs/using/#writingscripts)
  * For a Safari extension, see [johnsonn]
 
-Installation
-------------
+## Installation ##
 
-1. If using Firefox, you need to install the [Greasemonkey extension](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) before you continue. If using Chrome, skip to the next step.
+### Firefox ###
+
+1. Install the [Greasemonkey extension](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
 
 2. [Click here](https://github.com/iangreenleaf/GrinnellPlans-Newlove/raw/master/newlove.user.js). A box should show up asking you if you want to install the script. Do so. If the box doesn't show up, click on _Tools->Greasemonkey->Install User Script..._ (you must first navigate to the script for this option to not be grayed out).
 
-3. Now go to your quicklove page. A box should pop up asking for your username. Assuming it has guessed correctly, click 'Ok' and you're all set. Check out Usage below for more options. 
+3. Now go to your quicklove page. A box should pop up asking for your username. Assuming it has guessed correctly, click 'Ok' and you're all set. Check out Usage below for more options.
 
-Usage
------
+### Chrome ###
+
+[Install the extension from the Chrome Store.](https://chrome.google.com/webstore/detail/grinnellplans-newlove/backipgbokemnkkfbcicjllnfeoeenaf/details)
+
+## Usage ##
 
 The script runs every time you open your quicklove page. It will only show planlove that is different from the last time the page was opened. There are a couple options you should know about. You can find both of these by navigating to _Tools->Greasemonkey->User Script Commands..._
 
