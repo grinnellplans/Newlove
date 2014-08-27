@@ -33,6 +33,8 @@
 // @match          https://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @include        https://grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @match          https://grinnellplans.com/search.php?mysearch=*&planlove=1*
+// @grant          GM_registerMenuCommand
+// @grant          GM_log
 // ==/UserScript==
 
 /* Credit Douglas Crockford <http://javascript.crockford.com/remedial.html> */
@@ -70,6 +72,21 @@ function saveOldlove() {
     localStorage.setItem("planloveHash" + guessUsername, JSON.stringify(oldlove));
 }
 
+// Compatibility proxy to only run Greasemonkey commands when in Greasemonkey.
+var rootScope = this;
+var Greasy = {
+  registerMenuCommand: function() {
+    if (typeof GM_registerMenuCommand != 'undefined') {
+      GM_registerMenuCommand.apply(rootScope, arguments);
+    }
+  }
+  , log: function() {
+    if (typeof GM_log != 'undefined') {
+      GM_log.apply(rootScope, arguments);
+    }
+  }
+};
+
 (function() {
   // Figure out if this is actually the quicklove page, as opposed to
   // a regular search. Hackity hack!
@@ -90,8 +107,13 @@ function saveOldlove() {
   // Now, if the page we're currently on isn't searching for that
   // username, fuggedaboudit.
   if (username != guessUsername && username != "everyone") {
+      Greasy.log("False alarm, this isn't a quicklove page. Exiting.");
       return false;
   }
+
+  // Add items to the menu
+  Greasy.registerMenuCommand("Reset username", resetValues, "", "", "R");
+  Greasy.registerMenuCommand("Save as unread", saveOldlove, "", "", "u");
 
   // Find all 'sub-lists' in the page
   var loves = document.evaluate(
