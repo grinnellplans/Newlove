@@ -22,7 +22,7 @@
 // 1.3 - Use native JSON for storage, fix problems with FF4
 // ==UserScript==
 // @name           NewLove
-// @version        1.3.2
+// @version        1.3.3
 // @namespace      http://www.grinnellplans.com
 // @description    Shows only new planlove in the quicklove page.
 // @downloadUrl    https://github.com/iangreenleaf/GrinnellPlans-Newlove/raw/master/newlove.user.js
