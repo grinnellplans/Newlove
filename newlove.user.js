@@ -70,78 +70,80 @@ function saveOldlove() {
     localStorage.setItem("planloveHash" + guessUsername, JSON.stringify(oldlove));
 }
 
-// Figure out if this is actually the quicklove page, as opposed to
-// a regular search. Hackity hack!
-username = localStorage.getItem("username");
+(function() {
+  // Figure out if this is actually the quicklove page, as opposed to
+  // a regular search. Hackity hack!
+  username = localStorage.getItem("username");
 
-// We need to determine the username. Let's make a guess based on
-// the current url of the page.
-var urly = window.location.href;
-var startIndex = urly.indexOf("mysearch=") + 9;
-var endIndex = urly.indexOf("&", startIndex);
-var guessUsername = urly.substring(startIndex, endIndex);
-if (!username) {
-    // Ask for confirmation of the username
-    username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
-    if (!username) return false; // give up
-    localStorage.setItem("username", username);
-}
-// Now, if the page we're currently on isn't searching for that
-// username, fuggedaboudit.
-if (username != guessUsername && username != "everyone") {
-    return false;
-}
+  // We need to determine the username. Let's make a guess based on
+  // the current url of the page.
+  var urly = window.location.href;
+  var startIndex = urly.indexOf("mysearch=") + 9;
+  var endIndex = urly.indexOf("&", startIndex);
+  var guessUsername = urly.substring(startIndex, endIndex);
+  if (!username) {
+      // Ask for confirmation of the username
+      username = window.prompt("What's your username?\n\nIf you want to stalk other people's newlove as well as your own, enter 'everyone' here.", guessUsername).toLowerCase();
+      if (!username) return false; // give up
+      localStorage.setItem("username", username);
+  }
+  // Now, if the page we're currently on isn't searching for that
+  // username, fuggedaboudit.
+  if (username != guessUsername && username != "everyone") {
+      return false;
+  }
 
-// Find all 'sub-lists' in the page
-var loves = document.evaluate(
-        '//ul[@id="search_results"]/li//ul/li',
-        document,
-        null,
-        XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
-        null);
+  // Find all 'sub-lists' in the page
+  var loves = document.evaluate(
+          '//ul[@id="search_results"]/li//ul/li',
+          document,
+          null,
+          XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
+          null);
 
-// Get the stored planlove from last time
-oldlove_str = localStorage.getItem("planloveHash" + guessUsername);
+  // Get the stored planlove from last time
+  oldlove_str = localStorage.getItem("planloveHash" + guessUsername);
 
-// Convert from the stored string to a hashtable of arrays
-try {
-    var oldlove = JSON.parse( oldlove_str );
-    // Test it to see if it's null
-    oldlove["foo"];
-} catch (e) {
-    var oldlove = {};
-}
+  // Convert from the stored string to a hashtable of arrays
+  try {
+      var oldlove = JSON.parse( oldlove_str );
+      // Test it to see if it's null
+      oldlove["foo"];
+  } catch (e) {
+      var oldlove = {};
+  }
 
-// A running list of all quicklove received
-var newlove = {};
-// Read quicklove, to be hidden
-var toRemove = []
+  // A running list of all quicklove received
+  var newlove = {};
+  // Read quicklove, to be hidden
+  var toRemove = []
 
-// Iterate through the list of search results
-var thisLoveNode;
-while ( thisLoveNode = loves.iterateNext() ) {
-    var author = getAuthor(thisLoveNode.parentNode.parentNode);
+  // Iterate through the list of search results
+  var thisLoveNode;
+  while ( thisLoveNode = loves.iterateNext() ) {
+      var author = getAuthor(thisLoveNode.parentNode.parentNode);
 
-    thisLoveText = thisLoveNode.textContent;
+      thisLoveText = thisLoveNode.textContent;
 
-    // Check each lovin' against list of author's previous lovin'
-    if (arrayContains(oldlove[author], thisLoveText)) {
-        // Mark for removal
-        toRemove.push( thisLoveNode );
-    }
+      // Check each lovin' against list of author's previous lovin'
+      if (arrayContains(oldlove[author], thisLoveText)) {
+          // Mark for removal
+          toRemove.push( thisLoveNode );
+      }
 
-    // Fetch the array of planlove for the current author
-    var temp_arr = newlove[author];
-    // Create it if it doesn't exist
-    if (!newlove[author]) { newlove[author] = []; }
-    // Add it to the new list of planlove
-    newlove[author].push( thisLoveText );
-}
+      // Fetch the array of planlove for the current author
+      var temp_arr = newlove[author];
+      // Create it if it doesn't exist
+      if (!newlove[author]) { newlove[author] = []; }
+      // Add it to the new list of planlove
+      newlove[author].push( thisLoveText );
+  }
 
-// Now remove all old love
-toRemove.forEach( function( n ) {
-    n.parentNode.removeChild( n );
-});
+  // Now remove all old love
+  toRemove.forEach( function( n ) {
+      n.parentNode.removeChild( n );
+  });
 
-// Store the new list of planlove, for next time
-localStorage.setItem("planloveHash" + guessUsername, JSON.stringify(newlove));
+  // Store the new list of planlove, for next time
+  localStorage.setItem("planloveHash" + guessUsername, JSON.stringify(newlove));
+})()
