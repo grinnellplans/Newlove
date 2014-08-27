@@ -89,13 +89,8 @@ if (!username) {
 // Now, if the page we're currently on isn't searching for that
 // username, fuggedaboudit.
 if (username != guessUsername && username != "everyone") {
-    GM_log("False alarm, this isn't a quicklove page. Exiting.");
     return false;
 }
-
-// Add items to the menu
-GM_registerMenuCommand("Reset username", resetValues, "", "", "R");
-GM_registerMenuCommand("Save as unread", saveOldlove, "", "", "u");
 
 // Find all 'sub-lists' in the page
 var loves = document.evaluate(
