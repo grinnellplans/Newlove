@@ -25,6 +25,7 @@
 // @version        1.3.2
 // @namespace      http://www.grinnellplans.com
 // @description    Shows only new planlove in the quicklove page.
+// @downloadUrl    https://github.com/iangreenleaf/GrinnellPlans-Newlove/raw/master/newlove.user.js
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @match          http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @include        http://grinnellplans.com/search.php?mysearch=*&planlove=1*
