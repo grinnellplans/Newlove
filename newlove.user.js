@@ -20,9 +20,10 @@
 // 1.1 - Added ability to watch everyone's quicklove
 // 1.2 - Erin [nichols] reworked this to work in Chrome!
 // 1.3 - Use native JSON for storage, fix problems with FF4
+// 1.4 - Updates for GreaseMonkey 3.0
 // ==UserScript==
 // @name           NewLove
-// @version        1.3.3
+// @version        1.4.0
 // @namespace      http://www.grinnellplans.com
 // @description    Shows only new planlove in the quicklove page.
 // @downloadUrl    https://github.com/iangreenleaf/GrinnellPlans-Newlove/raw/master/newlove.user.js
