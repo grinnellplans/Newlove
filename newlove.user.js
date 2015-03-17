@@ -76,14 +76,14 @@ function saveOldlove() {
 // Compatibility proxy to only run Greasemonkey commands when in Greasemonkey.
 var rootScope = this;
 var Greasy = {
-  registerMenuCommand: function() {
+  registerMenuCommand: function(a, b, c) {
     if (typeof GM_registerMenuCommand != 'undefined') {
-      GM_registerMenuCommand.apply(rootScope, arguments);
+      GM_registerMenuCommand(a, b, c);
     }
   }
-  , log: function() {
+  , log: function(message) {
     if (typeof GM_log != 'undefined') {
-      GM_log.apply(rootScope, arguments);
+      GM_log(message);
     }
   }
 };
