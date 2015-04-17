@@ -23,10 +23,10 @@
 // 1.4 - Updates for GreaseMonkey 3.0
 // ==UserScript==
 // @name           NewLove
-// @version        1.4.0
+// @version        1.4.1
 // @namespace      http://www.grinnellplans.com
 // @description    Shows only new planlove in the quicklove page.
-// @downloadUrl    https://github.com/iangreenleaf/GrinnellPlans-Newlove/raw/master/newlove.user.js
+// @downloadUrl    https://github.com/grinnellplans/Newlove/raw/master/newlove.user.js
 // @include        http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @match          http://www.grinnellplans.com/search.php?mysearch=*&planlove=1*
 // @include        http://grinnellplans.com/search.php?mysearch=*&planlove=1*
